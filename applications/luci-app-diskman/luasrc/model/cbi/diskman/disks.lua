@@ -133,8 +133,8 @@ d:option(DummyValue, "health_status", translate("Health") .. "<br/>" .. translat
 -- btn_eject.write = function(self, section, value)
 --   local dev = section
 --   local disk_info = dm.get_disk_info(dev, true)
---   if disk_info.p_table:match("Raid") then
---     m.errmessage = translate("Unsupported raid reject!")
+--  if disk_info.p_table:match("Raid") or disk_info.model:match("MMC") then
+--    m.errmessage = translate("Unsupported raid and MMC reject!")
 --     return
 --   end
 --   for i, p in ipairs(disk_info.partitions) do
