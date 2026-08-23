@@ -49,6 +49,12 @@ config PACKAGE_$(PKG_NAME)_INCLUDE_kmod_md_linears
 	depends on PACKAGE_$(PKG_NAME)_INCLUDE_mdadm
 	bool "Include kmod-md-linear"
 	default n
+define Package/$(PKG_NAME)/postinst
+#!/bin/sh
+[ -n "$${IPKG_INSTROOT}" ] || {
+	chmod 0755 /usr/libexec/rpcd/luci.diskbox 2>/dev/null || true
+}
+exit 0
 endef
 
 include $(TOPDIR)/feeds/luci/luci.mk
