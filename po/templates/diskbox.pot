@@ -1,6 +1,6 @@
-﻿msgid ""
+msgid ""
 msgstr ""
-"Project-Id-Version: luci-app-diskbox 1.0.0\n"
+"Project-Id-Version: luci-app-diskbox 1.26.8\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-23 18:50+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
