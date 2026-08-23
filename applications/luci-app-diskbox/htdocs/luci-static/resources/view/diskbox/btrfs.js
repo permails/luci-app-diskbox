@@ -340,22 +340,31 @@ return view.extend({
 						ev.preventDefault();
 						var src = snapSrcIn.value;
 						if (!src || !src.startsWith('/')) {
-							ui.addNotification(null, E('p', {}, _('Please input Source Path of snapshot, Source Path must start with \'/\'')));
+							ui.addNotification(null, E('p', {}, _('请输入快照来源路径，必须以 \'/\' 开头！')));
 							return;
 						}
-						ui.showModal(_('Creating Snapshot'), [ E('p', { 'class': 'spinning' }, _('Creating Btrfs snapshot...')) ]);
+						ui.showModal(_('正在创建快照'), [ E('p', { 'class': 'spinning' }, _('正在创建 Btrfs 快照...')) ]);
 						callBtrfsSnapshotCreate(uuid, src, snapDstIn.value || '', snapRoCheck.checked).then(function(res) {
 							if (res && res.code !== 0) {
-								ui.addNotification(null, E('p', {}, res.error || _('Failed to create snapshot.')));
+								ui.addNotification(null, E('p', {}, res.error || _('创建快照失败。')));
 							}
 							location.reload();
 						});
 					}
-				}, _('New Snapshot'))
+				}, _('创建快照'))
 			])
 		]));
 
 		viewRoot.appendChild(snapSection);
+
+		// Footer Action Bar
+		var footerDiv = E('div', { 'class': 'cbi-page-actions' }, [
+			E('a', {
+				'class': 'btn cbi-button cbi-button-link',
+				'href': L.url('admin/system/diskbox')
+			}, _('返回至概览'))
+		]);
+		viewRoot.appendChild(footerDiv);
 
 		return viewRoot;
 	},
