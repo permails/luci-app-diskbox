@@ -37,7 +37,7 @@
 
 ## 目录结构
 ```
-applications/luci-app-diskbox/
+luci-app-diskbox/
 ├── Makefile
 ├── htdocs/
 │   └── luci-static/resources/view/diskbox/
@@ -45,11 +45,14 @@ applications/luci-app-diskbox/
 │       ├── partition.js
 │       └── btrfs.js
 ├── root/
+│   ├── etc/uci-defaults/99-luci-app-diskbox
 │   ├── usr/libexec/rpcd/luci.diskbox
 │   └── usr/share/
 │       ├── luci/menu.d/luci-app-diskbox.json
 │       └── rpcd/acl.d/luci-app-diskbox.json
-└── po/
+├── po/
+├── LICENSE
+└── README.md
 ```
 
 ## 作者 / Author
