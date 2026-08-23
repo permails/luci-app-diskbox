@@ -351,30 +351,26 @@ return view.extend({
 
 			var viewRoot = E('div', { 'class': 'cbi-map' });
 
-			// Header & Back Button
-			var headerDiv = E('div', { 'style': 'display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;' }, [
-				E('div', {}, [
-					E('h2', { 'style': 'margin-bottom:0.25rem;' }, _('分区管理') + ' - /dev/' + devName),
-					E('div', { 'class': 'cbi-map-descr' }, _('通过 LuCI 管理磁盘分区'))
-				]),
-				E('button', {
-					'class': 'btn cbi-button cbi-button-link',
-					'click': function() { self.renderOverview(container, data); }
-				}, '« ' + _('返回概览'))
+			// Header
+			var headerDiv = E('div', { 'style': 'margin-bottom:1rem;' }, [
+				E('h2', { 'style': 'margin-bottom:0.25rem;' }, _('分区管理')),
+				E('div', { 'class': 'cbi-map-descr' }, _('通过LuCI分区磁盘。'))
 			]);
 			viewRoot.appendChild(headerDiv);
 
 			if (diskInfo.error || !diskInfo.size) {
 				viewRoot.appendChild(E('div', { 'class': 'cbi-section' }, [
 					E('div', { 'style': 'padding:2rem; text-align:center;' }, [
-						E('p', { 'style': 'font-size:1.1rem; color:#f5365c;' }, _('未找到设备 /dev/%s 或无介质。').format(devName)),
-						E('button', {
-							'class': 'btn cbi-button cbi-button-link',
-							'style': 'margin-top:1rem;',
-							'click': function() { self.renderOverview(container, data); }
-						}, _('返回概览'))
+						E('p', { 'style': 'font-size:1.1rem; color:#f5365c;' }, _('未找到设备 /dev/%s 或无介质。').format(devName))
 					])
 				]));
+				var errFooter = E('div', { 'class': 'cbi-page-actions' }, [
+					E('button', {
+						'class': 'btn cbi-button cbi-button-link',
+						'click': function() { self.renderOverview(container, data); }
+					}, _('返回至概览'))
+				]);
+				viewRoot.appendChild(errFooter);
 				container.appendChild(viewRoot);
 				return;
 			}
@@ -594,6 +590,15 @@ return view.extend({
 				viewRoot.appendChild(partSection);
 			}
 
+			// Footer Action Bar
+			var footerDiv = E('div', { 'class': 'cbi-page-actions' }, [
+				E('button', {
+					'class': 'btn cbi-button cbi-button-link',
+					'click': function() { self.renderOverview(container, data); }
+				}, _('返回至概览'))
+			]);
+			viewRoot.appendChild(footerDiv);
+
 			container.appendChild(viewRoot);
 		});
 	},
@@ -614,16 +619,10 @@ return view.extend({
 
 			var viewRoot = E('div', { 'class': 'cbi-map' });
 
-			// Header & Back Button
-			var headerDiv = E('div', { 'style': 'display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;' }, [
-				E('div', {}, [
-					E('h2', { 'style': 'margin-bottom:0.25rem;' }, _('Btrfs 管理') + ' - ' + (info.label || uuid)),
-					E('div', { 'class': 'cbi-map-descr' }, _('管理 Btrfs 文件系统、子卷与快照'))
-				]),
-				E('button', {
-					'class': 'btn cbi-button cbi-button-link',
-					'click': function() { self.renderOverview(container, data); }
-				}, '« ' + _('返回概览'))
+			// Header
+			var headerDiv = E('div', { 'style': 'margin-bottom:1rem;' }, [
+				E('h2', { 'style': 'margin-bottom:0.25rem;' }, _('Btrfs 管理') + ' - ' + (info.label || uuid)),
+				E('div', { 'class': 'cbi-map-descr' }, _('管理 Btrfs 文件系统、子卷与快照'))
 			]);
 			viewRoot.appendChild(headerDiv);
 
@@ -823,11 +822,17 @@ return view.extend({
 								self.renderBtrfsDetailView(container, uuid, data);
 							});
 						}
-					}, _('创建快照'))
-				])
-			]));
-
 			viewRoot.appendChild(snapSection);
+
+			// Footer Action Bar
+			var footerDiv = E('div', { 'class': 'cbi-page-actions' }, [
+				E('button', {
+					'class': 'btn cbi-button cbi-button-link',
+					'click': function() { self.renderOverview(container, data); }
+				}, _('返回至概览'))
+			]);
+			viewRoot.appendChild(footerDiv);
+
 			container.appendChild(viewRoot);
 		});
 	},

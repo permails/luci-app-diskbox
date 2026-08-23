@@ -189,30 +189,26 @@ return view.extend({
 
 		var viewRoot = E('div', { 'class': 'cbi-map' });
 
-		// Header & Back Button
-		var headerDiv = E('div', { 'style': 'display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;' }, [
-			E('div', {}, [
-				E('h2', { 'style': 'margin-bottom:0.25rem;' }, _('Partition Management') + ' ' + _('分区管理') + ' - /dev/' + devName),
-				E('div', { 'class': 'cbi-map-descr' }, _('Partition Disk over LuCI.') + ' ' + _('通过 LuCI 管理磁盘分区'))
-			]),
-			E('a', {
-				'class': 'btn cbi-button cbi-button-link',
-				'href': L.url('admin/system/diskbox')
-			}, '« ' + _('Back to Overview') + ' / ' + _('返回概览'))
+		// Header
+		var headerDiv = E('div', { 'style': 'margin-bottom:1rem;' }, [
+			E('h2', { 'style': 'margin-bottom:0.25rem;' }, _('分区管理')),
+			E('div', { 'class': 'cbi-map-descr' }, _('通过LuCI分区磁盘。'))
 		]);
 		viewRoot.appendChild(headerDiv);
 
 		if (diskInfo.error || !diskInfo.size) {
 			viewRoot.appendChild(E('div', { 'class': 'cbi-section' }, [
 				E('div', { 'style': 'padding:2rem; text-align:center;' }, [
-					E('p', { 'style': 'font-size:1.1rem; color:#f5365c;' }, _('Device /dev/%s not found or has no media.').format(devName)),
-					E('a', {
-						'class': 'btn cbi-button cbi-button-link',
-						'href': L.url('admin/system/diskbox'),
-						'style': 'margin-top:1rem;'
-					}, _('Back to Overview') + ' / ' + _('返回概览'))
+					E('p', { 'style': 'font-size:1.1rem; color:#f5365c;' }, _('未找到设备 /dev/%s 或无介质。').format(devName))
 				])
 			]));
+			var errFooter = E('div', { 'class': 'cbi-page-actions' }, [
+				E('a', {
+					'class': 'btn cbi-button cbi-button-link',
+					'href': L.url('admin/system/diskbox')
+				}, _('返回至概览'))
+			]);
+			viewRoot.appendChild(errFooter);
 			return viewRoot;
 		}
 
@@ -431,6 +427,15 @@ return view.extend({
 			partSection.appendChild(partTable);
 			viewRoot.appendChild(partSection);
 		}
+
+		// Footer Action Bar
+		var footerDiv = E('div', { 'class': 'cbi-page-actions' }, [
+			E('a', {
+				'class': 'btn cbi-button cbi-button-link',
+				'href': L.url('admin/system/diskbox')
+			}, _('返回至概览'))
+		]);
+		viewRoot.appendChild(footerDiv);
 
 		return viewRoot;
 	},
