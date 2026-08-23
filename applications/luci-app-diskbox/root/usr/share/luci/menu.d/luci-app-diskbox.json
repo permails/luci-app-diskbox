@@ -1,6 +1,6 @@
 {
 	"admin/system/diskbox": {
-		"title": "DiskBox",
+		"title": "DiskManager",
 		"order": 55,
 		"action": {
 			"type": "view",
