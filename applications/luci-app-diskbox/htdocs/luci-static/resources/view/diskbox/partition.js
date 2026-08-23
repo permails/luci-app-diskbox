@@ -354,21 +354,21 @@ return view.extend({
 							var sSec = startIn.value;
 							var eSec = endIn.value;
 							if (!sSec || !eSec) {
-								ui.addNotification(null, E('p', {}, _('Invalid Start or End sector!')));
+								ui.addNotification(null, E('p', {}, _('起始或终止扇区无效！')));
 								return;
 							}
-							ui.showModal(_('Creating Partition'), [ E('p', { 'class': 'spinning' }, _('Creating new partition...')) ]);
+							ui.showModal(_('正在创建分区'), [ E('p', { 'class': 'spinning' }, _('正在创建新分区...')) ]);
 							callCreatePartition(devName, sSec, eSec, 'primary').then(function(res) {
 								if (res && res.code !== 0) {
-									ui.addNotification(null, E('p', {}, res.error || _('Failed to create partition.')));
+									ui.addNotification(null, E('p', {}, res.error || _('创建分区失败。')));
 								}
 								location.reload();
 							});
 						}
-					}, _('New') + ' / ' + _('新建'));
+					}, _('新建'));
 
 					partTable.appendChild(E('tr', { 'class': 'tr', 'style': 'background-color:rgba(255,255,255,0.03);' }, [
-						E('td', { 'class': 'td', 'style': 'font-style:italic; color:#888;' }, _('Free Space') + ' / ' + _('空闲空间')),
+						E('td', { 'class': 'td', 'style': 'font-style:italic; color:#888;' }, _('空闲空间')),
 						E('td', { 'class': 'td' }, startIn),
 						E('td', { 'class': 'td' }, endIn),
 						E('td', { 'class': 'td' }, part.size_formated),
@@ -380,34 +380,38 @@ return view.extend({
 						E('td', { 'class': 'td center' }, createBtn)
 					]));
 				} else {
+					var isExtended = (part.type === 'extended' || part.fs === 'extended');
 					var formatBtn;
-					if (!isMounted && part.fs !== 'extended') {
+					if (!isMounted && !isExtended && part.type !== 'free') {
 						formatBtn = E('button', {
 							'class': 'btn cbi-button cbi-button-reset',
 							'click': function(ev) {
 								ev.preventDefault();
 								self.showFormatModal(part.name, formatCmds, part.fs);
 							}
-						}, (part.fs === 'raw' ? (_('Format') + ' / ' + _('格式化')) : part.fs.toUpperCase()));
+						}, (part.fs === 'raw' ? _('格式化') : part.fs.toUpperCase()));
 					} else {
-						formatBtn = E('span', {}, part.fs);
+						formatBtn = E('span', {}, isExtended ? _('扩展分区') : part.fs);
 					}
+
+					var hasLogicals = partitions.some(function(p){ return p.type === 'logical'; });
+					var removeDisabled = isMounted || (isExtended && hasLogicals);
 
 					var removeBtn = E('button', {
 						'class': 'btn cbi-button cbi-button-remove',
-						'disabled': isMounted,
+						'disabled': removeDisabled,
 						'click': function(ev) {
 							ev.preventDefault();
-							if (!confirm(_('Are you sure you want to delete partition %s?').format(part.name))) return;
-							ui.showModal(_('Deleting Partition'), [ E('p', { 'class': 'spinning' }, _('Removing partition...')) ]);
+							if (!confirm(_('确定要删除分区 %s 吗？').format(part.name))) return;
+							ui.showModal(_('正在删除分区'), [ E('p', { 'class': 'spinning' }, _('正在删除分区...')) ]);
 							callRemovePartition(devName, part.number).then(function(res) {
 								if (res && res.code !== 0) {
-									ui.addNotification(null, E('p', {}, res.error || _('Failed to remove partition.')));
+									ui.addNotification(null, E('p', {}, res.error || _('删除分区失败。')));
 								}
 								location.reload();
 							});
 						}
-					}, _('Remove') + ' / ' + _('删除'));
+					}, _('删除'));
 
 					partTable.appendChild(E('tr', { 'class': 'tr' }, [
 						E('td', { 'class': 'td' }, E('strong', {}, part.name)),

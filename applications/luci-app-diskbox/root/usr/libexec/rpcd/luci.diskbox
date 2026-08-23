@@ -219,7 +219,11 @@ action_list_devices() {
 action_get_disk_info() {
 	read -r input
 	local dev=$(echo "$input" | jsonfilter -e '@.device' 2>/dev/null | sed 's|^/dev/||')
-	if [ -z "$dev" ] || [ ! -e "/sys/block/$dev" -a ! -e "/sys/class/block/$dev" ]; then
+	if [ -z "$dev" ]; then
+		echo '{"error": "Device not specified"}'
+		return
+	fi
+	if [ ! -e "/sys/block/$dev" ] && [ ! -e "/sys/class/block/$dev" ]; then
 		echo '{"error": "Device not found"}'
 		return
 	fi
@@ -302,7 +306,7 @@ action_get_disk_info() {
 			local pstart=$(echo "$line" | cut -d: -f2 | sed 's/s$//')
 			local pend=$(echo "$line" | cut -d: -f3 | sed 's/s$//')
 			local psize=$(echo "$line" | cut -d: -f4 | sed 's/s$//')
-			local pfs=$(echo "$line" | cut -d: -f5)
+			local pfs=$(echo "$line" | cut -d: -f5 | tr -d ';')
 			local part_bytes=$((psize * logic_sec))
 			local part_str=$(format_bytes "$part_bytes")
 			local part_name="-"
@@ -315,16 +319,34 @@ action_get_disk_info() {
 			if [ "$pfs" = "free" ]; then
 				pnum="-1"
 				pfs="Free Space"
+				part_type="free"
 			else
 				case "$dev" in
 					sd*|vd*|sata*) part_name="${dev}${pnum}" ;;
 					mmcblk*|nvme*|md*) part_name="${dev}p${pnum}" ;;
 				esac
 
-				if [ -n "$part_name" ] && [ -z "$pfs" ] && which lsblk >/dev/null 2>&1; then
-					pfs=$(lsblk -no fstype "/dev/$part_name" 2>/dev/null)
+				if [ "$pt" = "MBR" ]; then
+					if [ "$pnum" -gt 4 ] 2>/dev/null; then
+						part_type="logical"
+					elif [ "$pnum" -gt 0 ] 2>/dev/null; then
+						local sys_sz=$(cat "/sys/block/$dev/$part_name/size" 2>/dev/null || echo 0)
+						local sys_bytes=$((sys_sz * logic_sec))
+						if [ "$sys_bytes" -gt 0 ] && [ "$sys_bytes" -ne "$part_bytes" ]; then
+							part_type="extended"
+							pfs="-"
+							part_bytes="$sys_bytes"
+							part_str=$(format_bytes "$sys_bytes")
+						fi
+					fi
 				fi
-				[ -z "$pfs" ] && pfs="raw"
+
+				if [ "$part_type" != "extended" ]; then
+					if [ -n "$part_name" ] && [ -z "$pfs" ] && which lsblk >/dev/null 2>&1; then
+						pfs=$(lsblk -no fstype "/dev/$part_name" 2>/dev/null)
+					fi
+					[ -z "$pfs" ] && pfs="raw"
+				fi
 
 				part_mount=$(get_mount_point "$part_name")
 				if [ "$part_mount" != "-" ]; then

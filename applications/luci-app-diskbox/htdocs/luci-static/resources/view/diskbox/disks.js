@@ -234,7 +234,7 @@ return view.extend({
 		});
 	},
 
-	showFormatModal: function(partName, formatCmds, currentFs) {
+	showFormatModal: function(partName, formatCmds, currentFs, onSuccess) {
 		var selFs = E('select', { 'class': 'cbi-input-select', 'style': 'width:100%;' });
 		Object.keys(formatCmds).forEach(function(fs) {
 			var opt = E('option', { 'value': fs }, fs.toUpperCase());
@@ -267,7 +267,12 @@ return view.extend({
 						callFormatPartition(partName, targetFs).then(function(res) {
 							if (res && res.code === 0) {
 								ui.addNotification(null, E('p', {}, _('分区格式化成功！')));
-								location.reload();
+								ui.hideModal();
+								if (typeof onSuccess === 'function') {
+									onSuccess();
+								} else {
+									location.reload();
+								}
 							} else {
 								dom.content(statusP, res ? res.error : _('格式化失败。'));
 							}
@@ -535,22 +540,28 @@ return view.extend({
 							E('td', { 'class': 'td center' }, createBtn)
 						]));
 					} else {
+						var isExtended = (part.type === 'extended' || part.fs === 'extended');
 						var formatBtn;
-						if (!isMounted && part.fs !== 'extended') {
+						if (!isMounted && !isExtended && part.type !== 'free') {
 							formatBtn = E('button', {
 								'class': 'btn cbi-button cbi-button-reset',
 								'click': function(ev) {
 									ev.preventDefault();
-									self.showFormatModal(part.name, formatCmds, part.fs);
+									self.showFormatModal(part.name, formatCmds, part.fs, function() {
+										self.renderPartitionDetailView(container, devName, data);
+									});
 								}
 							}, (part.fs === 'raw' ? _('格式化') : part.fs.toUpperCase()));
 						} else {
-							formatBtn = E('span', {}, part.fs);
+							formatBtn = E('span', {}, isExtended ? _('扩展分区') : part.fs);
 						}
+
+						var hasLogicals = partitions.some(function(p){ return p.type === 'logical'; });
+						var removeDisabled = isMounted || (isExtended && hasLogicals);
 
 						var removeBtn = E('button', {
 							'class': 'btn cbi-button cbi-button-remove',
-							'disabled': isMounted,
+							'disabled': removeDisabled,
 							'click': function(ev) {
 								ev.preventDefault();
 								if (!confirm(_('确定要删除分区 %s 吗？').format(part.name))) return;
