@@ -82,15 +82,9 @@ return view.extend({
 
 		// If no UUID was passed in URL or filesystem not found, show list of available Btrfs devices
 		if (!uuid || !info.uuid) {
-			var headerDiv = E('div', { 'style': 'display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem;' }, [
-				E('div', {}, [
-					E('h2', { 'style': 'margin:0;' }, _('Btrfs Management')),
-					E('div', { 'class': 'cbi-map-descr' }, _('Select a Btrfs filesystem to manage.'))
-				]),
-				E('a', {
-					'class': 'btn cbi-button cbi-button-link',
-					'href': L.url('admin/system/diskbox')
-				}, _('Back to Overview'))
+			var headerDiv = E('div', { 'style': 'margin-bottom:1rem;' }, [
+				E('h2', { 'style': 'margin-bottom:0.25rem;' }, _('Btrfs Management')),
+				E('div', { 'class': 'cbi-map-descr' }, _('Select a Btrfs filesystem to manage.'))
 			]);
 			viewRoot.appendChild(headerDiv);
 
@@ -106,6 +100,13 @@ return view.extend({
 						}, _('Go to DiskBox to Create Btrfs'))
 					])
 				]));
+				var errFooter = E('div', { 'class': 'cbi-page-actions' }, [
+					E('a', {
+						'class': 'btn cbi-button cbi-button-link',
+						'href': L.url('admin/system/diskbox')
+					}, _('Back to Overview'))
+				]);
+				viewRoot.appendChild(errFooter);
 				return viewRoot;
 			}
 
@@ -118,7 +119,7 @@ return view.extend({
 					E('th', { 'class': 'th' }, _('Label')),
 					E('th', { 'class': 'th' }, _('Members')),
 					E('th', { 'class': 'th' }, _('Usage')),
-					E('th', { 'class': 'th center' }, _('Action'))
+					E('th', { 'class': 'th center' }, '')
 				])
 			]);
 			btrfsKeys.forEach(function(uKey) {
@@ -132,25 +133,28 @@ return view.extend({
 						E('a', {
 							'class': 'btn cbi-button cbi-button-action',
 							'href': L.url('admin/system/diskbox/btrfs', b.uuid)
-						}, _('Manage'))
+						}, _('Edit'))
 					])
 				]));
 			});
 			btrfsSection.appendChild(btrfsTable);
 			viewRoot.appendChild(btrfsSection);
+
+			var footerDiv = E('div', { 'class': 'cbi-page-actions' }, [
+				E('a', {
+					'class': 'btn cbi-button cbi-button-link',
+					'href': L.url('admin/system/diskbox')
+				}, _('Back to Overview'))
+			]);
+			viewRoot.appendChild(footerDiv);
+
 			return viewRoot;
 		}
 
-		// Header & Back Button
-		var headerDiv = E('div', { 'style': 'display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem;' }, [
-			E('div', {}, [
-				E('h2', { 'style': 'margin:0;' }, _('Btrfs Management') + ' - ' + (info.label || uuid)),
-				E('div', { 'class': 'cbi-map-descr' }, _('Manage Btrfs Filesystem, Subvolumes and Snapshots.'))
-			]),
-			E('a', {
-				'class': 'btn cbi-button cbi-button-link',
-				'href': L.url('admin/system/diskbox')
-			}, _('Back to Overview'))
+		// Header
+		var headerDiv = E('div', { 'style': 'margin-bottom:1rem;' }, [
+			E('h2', { 'style': 'margin-bottom:0.25rem;' }, _('Btrfs Management') + ' - ' + (info.label || uuid)),
+			E('div', { 'class': 'cbi-map-descr' }, _('Manage Btrfs filesystem, subvolumes and snapshots.'))
 		]);
 		viewRoot.appendChild(headerDiv);
 
@@ -164,7 +168,7 @@ return view.extend({
 			'class': 'btn cbi-button cbi-button-edit',
 			'click': function(ev) {
 				ev.preventDefault();
-				ui.showModal(_('Updating Label'), [ E('p', { 'class': 'spinning' }, _('Updating Btrfs filesystem label...')) ]);
+				ui.showModal(_('Updating Label'), [ E('p', { 'class': 'spinning' }, _('Updating Btrfs label...')) ]);
 				callBtrfsSetLabel(uuid, labelIn.value).then(function(res) {
 					if (res && res.code !== 0) {
 						ui.addNotification(null, E('p', {}, res.error || _('Failed to update label.')));
@@ -187,18 +191,15 @@ return view.extend({
 				E('th', { 'class': 'th center' }, _('Label'))
 			]),
 			E('tr', { 'class': 'tr' }, [
-				E('td', { 'class': 'td' }, E('code', {}, info.uuid || uuid)),
+				E('td', { 'class': 'td' }, E('code', {}, info.uuid || '-')),
 				E('td', { 'class': 'td' }, info.members || '-'),
 				E('td', { 'class': 'td' }, info.data_raid_level || '-'),
-				E('td', { 'class': 'td' }, info.metadata_raid_lavel || '-'),
+				E('td', { 'class': 'td' }, info.metadata_raid_level || '-'),
 				E('td', { 'class': 'td' }, info.size_formated || '-'),
 				E('td', { 'class': 'td' }, info.used_formated || '-'),
 				E('td', { 'class': 'td' }, info.free_formated || '-'),
 				E('td', { 'class': 'td' }, info.usage || '-'),
-				E('td', { 'class': 'td center' }, [
-					labelIn,
-					updateLabelBtn
-				])
+				E('td', { 'class': 'td center' }, [ labelIn, updateLabelBtn ])
 			])
 		]);
 		infoSection.appendChild(infoTable);
@@ -206,7 +207,7 @@ return view.extend({
 
 		// Section: Subvolumes
 		var subvSection = E('div', { 'class': 'cbi-section' }, [
-			E('legend', {}, _('SubVolumes'))
+			E('legend', {}, _('Subvolumes'))
 		]);
 
 		var subvTable = E('table', { 'class': 'table cbi-section-table' }, [
@@ -216,7 +217,7 @@ return view.extend({
 				E('th', { 'class': 'th' }, _('UUID')),
 				E('th', { 'class': 'th' }, _('Path')),
 				E('th', { 'class': 'th center' }, _('Set Default')),
-				E('th', { 'class': 'th center' }, _('Action'))
+				E('th', { 'class': 'th center' }, '')
 			])
 		]);
 
@@ -265,7 +266,6 @@ return view.extend({
 			]));
 		});
 
-		// Create new subvolume row
 		var newSubvPath = E('input', { 'type': 'text', 'class': 'cbi-input-text', 'placeholder': '/my_subvolume' });
 		var createSubvBtn = E('button', {
 			'class': 'btn cbi-button cbi-button-add',
@@ -309,12 +309,12 @@ return view.extend({
 			E('label', { 'class': 'cbi-value-title' }, _('Source Path')),
 			E('div', { 'class': 'cbi-value-field' }, [
 				snapSrcIn,
-				E('div', { 'class': 'cbi-value-description' }, _('The source path for creating the snapshot (must start with \'/\')'))
+				E('div', { 'class': 'cbi-value-description' }, _('Source path for creating snapshot (must start with \'/\')'))
 			])
 		]));
 
 		snapSection.appendChild(E('div', { 'class': 'cbi-value' }, [
-			E('label', { 'class': 'cbi-value-title' }, _('Readonly')),
+			E('label', { 'class': 'cbi-value-title' }, _('Read-Only')),
 			E('div', { 'class': 'cbi-value-field' }, [
 				E('label', {}, [
 					snapRoCheck,
@@ -327,7 +327,7 @@ return view.extend({
 			E('label', { 'class': 'cbi-value-title' }, _('Destination Path (optional)')),
 			E('div', { 'class': 'cbi-value-field' }, [
 				snapDstIn,
-				E('div', { 'class': 'cbi-value-description' }, _('The destination path where you want to store the snapshot'))
+				E('div', { 'class': 'cbi-value-description' }, _('Destination path where you want to store the snapshot'))
 			])
 		]));
 
@@ -340,18 +340,18 @@ return view.extend({
 						ev.preventDefault();
 						var src = snapSrcIn.value;
 						if (!src || !src.startsWith('/')) {
-							ui.addNotification(null, E('p', {}, _('请输入快照来源路径，必须以 \'/\' 开头！')));
+							ui.addNotification(null, E('p', {}, _('Source path must start with \'/\'')));
 							return;
 						}
-						ui.showModal(_('正在创建快照'), [ E('p', { 'class': 'spinning' }, _('正在创建 Btrfs 快照...')) ]);
+						ui.showModal(_('Creating Snapshot'), [ E('p', { 'class': 'spinning' }, _('Creating Btrfs snapshot...')) ]);
 						callBtrfsSnapshotCreate(uuid, src, snapDstIn.value || '', snapRoCheck.checked).then(function(res) {
 							if (res && res.code !== 0) {
-								ui.addNotification(null, E('p', {}, res.error || _('创建快照失败。')));
+								ui.addNotification(null, E('p', {}, res.error || _('Failed to create snapshot.')));
 							}
 							location.reload();
 						});
 					}
-				}, _('创建快照'))
+				}, _('Create Snapshot'))
 			])
 		]));
 
@@ -362,7 +362,7 @@ return view.extend({
 			E('a', {
 				'class': 'btn cbi-button cbi-button-link',
 				'href': L.url('admin/system/diskbox')
-			}, _('返回至概览'))
+			}, _('Back to Overview'))
 		]);
 		viewRoot.appendChild(footerDiv);
 

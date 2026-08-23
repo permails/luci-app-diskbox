@@ -52,6 +52,36 @@ var callEjectDevice = rpc.declare({
 	params: ['device']
 });
 
+function translatePowerStatus(status) {
+	if (!status || status === '-') return '-';
+	var map = {
+		'ACTIVE': _('Active'),
+		'STANDBY': _('Standby'),
+		'SLEEP': _('Sleep')
+	};
+	return map[status] || status;
+}
+
+function translateHealth(health) {
+	if (!health || health === '-') return '-';
+	var map = {
+		'Normal': _('Normal'),
+		'PASSED': _('Passed'),
+		'Warning': _('Warning'),
+		'Urgent': _('Urgent'),
+		'FAILED': _('Failed')
+	};
+	return map[health] || health;
+}
+
+function translateFs(fs, type) {
+	if (type === 'extended' || fs === 'extended') return _('Extended Partition');
+	if (fs === 'Free Space' || type === 'free') return _('Free Space');
+	if (fs === 'raw') return _('Unformatted');
+	if (!fs || fs === '-') return '-';
+	return fs.toUpperCase();
+}
+
 return view.extend({
 	load: function() {
 		var dev = (L.env && L.env.requestpath && L.env.requestpath[4]) || 'sda';
@@ -64,7 +94,7 @@ return view.extend({
 
 	showSmartModal: function(dev) {
 		ui.showModal(_('S.M.A.R.T Attributes') + ' - /dev/' + dev, [
-			E('p', { 'class': 'spinning' }, _('Collecting data...') + ' / ' + _('正在收集数据...'))
+			E('p', { 'class': 'spinning' }, _('Collecting data...'))
 		]);
 
 		callGetSmartAttr(dev).then(function(res) {
@@ -81,7 +111,7 @@ return view.extend({
 				var table = E('table', { 'class': 'table cbi-section-table' }, [
 					E('tr', { 'class': 'tr table-titles' }, [
 						E('th', { 'class': 'th' }, 'KEY'),
-						E('th', { 'class': 'th' }, 'Value')
+						E('th', { 'class': 'th' }, _('Value'))
 					])
 				]);
 				attrs.forEach(function(item) {
@@ -95,7 +125,7 @@ return view.extend({
 				var table = E('table', { 'class': 'table cbi-section-table' }, [
 					E('tr', { 'class': 'tr table-titles' }, [
 						E('th', { 'class': 'th' }, 'ID'),
-						E('th', { 'class': 'th' }, _('Attrbute') + ' / ' + _('属性')),
+						E('th', { 'class': 'th' }, _('Attribute')),
 						E('th', { 'class': 'th' }, _('Flag')),
 						E('th', { 'class': 'th' }, _('Value')),
 						E('th', { 'class': 'th' }, _('Worst')),
@@ -131,7 +161,7 @@ return view.extend({
 					E('button', {
 						'class': 'btn cbi-button cbi-button-neutral',
 						'click': ui.hideModal
-					}, _('Cancel') + ' / ' + _('关闭'))
+					}, _('Close'))
 				])
 			]);
 		});
@@ -147,10 +177,10 @@ return view.extend({
 
 		var statusP = E('p', { 'style': 'color:#f5365c; font-weight:bold; margin-top:8px;' });
 
-		ui.showModal(_('Format partation:') + ' /dev/' + partName, [
+		ui.showModal(_('Format partition: /dev/%s').format(partName), [
 			E('p', {}, _('Formatting partition will ERASE all data stored on it.')),
 			E('div', { 'class': 'cbi-value' }, [
-				E('label', { 'class': 'cbi-value-title' }, _('File System') + ' / ' + _('文件系统')),
+				E('label', { 'class': 'cbi-value-title' }, _('File System')),
 				E('div', { 'class': 'cbi-value-field' }, selFs)
 			]),
 			statusP,
@@ -158,25 +188,26 @@ return view.extend({
 				E('button', {
 					'class': 'btn cbi-button cbi-button-reset',
 					'click': ui.hideModal
-				}, _('Cancel') + ' / ' + _('取消')),
+				}, _('Cancel')),
 				E('button', {
 					'class': 'btn cbi-button cbi-button-apply',
 					'click': function(ev) {
 						ev.preventDefault();
 						var targetFs = selFs.value;
-						dom.content(statusP, [ E('span', { 'class': 'spinning' }, _('Formatting..') + ' / ' + _('正在格式化...')) ]);
+						dom.content(statusP, [ E('span', { 'class': 'spinning' }, _('Formatting...')) ]);
 						this.disabled = true;
 
 						callFormatPartition(partName, targetFs).then(function(res) {
 							if (res && res.code === 0) {
 								ui.addNotification(null, E('p', {}, _('Partition formatted successfully!')));
+								ui.hideModal();
 								location.reload();
 							} else {
 								dom.content(statusP, res ? res.error : _('Format failed.'));
 							}
 						});
 					}
-				}, _('Format') + ' / ' + _('格式化'))
+				}, _('Format'))
 			])
 		]);
 	},
@@ -191,22 +222,22 @@ return view.extend({
 
 		// Header
 		var headerDiv = E('div', { 'style': 'margin-bottom:1rem;' }, [
-			E('h2', { 'style': 'margin-bottom:0.25rem;' }, _('分区管理')),
-			E('div', { 'class': 'cbi-map-descr' }, _('通过LuCI分区磁盘。'))
+			E('h2', { 'style': 'margin-bottom:0.25rem;' }, _('Partition Management')),
+			E('div', { 'class': 'cbi-map-descr' }, _('Partition disk over LuCI.'))
 		]);
 		viewRoot.appendChild(headerDiv);
 
 		if (diskInfo.error || !diskInfo.size) {
 			viewRoot.appendChild(E('div', { 'class': 'cbi-section' }, [
 				E('div', { 'style': 'padding:2rem; text-align:center;' }, [
-					E('p', { 'style': 'font-size:1.1rem; color:#f5365c;' }, _('未找到设备 /dev/%s 或无介质。').format(devName))
+					E('p', { 'style': 'font-size:1.1rem; color:#f5365c;' }, _('Device /dev/%s not found or has no media.').format(devName))
 				])
 			]));
 			var errFooter = E('div', { 'class': 'cbi-page-actions' }, [
 				E('a', {
 					'class': 'btn cbi-button cbi-button-link',
 					'href': L.url('admin/system/diskbox')
-				}, _('返回至概览'))
+				}, _('Back to Overview'))
 			]);
 			viewRoot.appendChild(errFooter);
 			return viewRoot;
@@ -214,24 +245,24 @@ return view.extend({
 
 		// Section: Device Info
 		var devSection = E('div', { 'class': 'cbi-section' }, [
-			E('legend', {}, _('Device Info') + ' / ' + _('设备信息'))
+			E('legend', {}, _('Device Info'))
 		]);
 
 		var isRaid = diskInfo.type && diskInfo.type.startsWith('md');
 
 		var devTable = E('table', { 'class': 'table cbi-section-table' }, [
 			E('tr', { 'class': 'tr table-titles' }, [
-				E('th', { 'class': 'th' }, _('Path') + ' / ' + _('路径')),
-				E('th', { 'class': 'th' }, _('Model') + ' / ' + _('型号')),
-				E('th', { 'class': 'th' }, _('Serial Number') + ' / ' + _('序列号')),
-				E('th', { 'class': 'th' }, _('Size') + ' / ' + _('大小')),
-				E('th', { 'class': 'th' }, _('Sector Size') + ' / ' + _('扇区大小')),
-				E('th', { 'class': 'th' }, _('Partition Table') + ' / ' + _('分区表')),
-				isRaid ? E('th', { 'class': 'th' }, _('Level')) : E('th', { 'class': 'th' }, _('Temp') + ' / ' + _('温度')),
-				isRaid ? E('th', { 'class': 'th' }, _('Members')) : E('th', { 'class': 'th' }, _('SATA Version') + ' / ' + _('SATA 版本')),
-				isRaid ? E('th', { 'class': 'th' }, _('Status') + ' / ' + _('状态')) : E('th', { 'class': 'th' }, _('Rotation Rate') + ' / ' + _('转速')),
-				E('th', { 'class': 'th' }, _('Status') + ' / ' + _('状态')),
-				E('th', { 'class': 'th' }, _('Health') + ' / ' + _('健康')),
+				E('th', { 'class': 'th' }, _('Path')),
+				E('th', { 'class': 'th' }, _('Model')),
+				E('th', { 'class': 'th' }, _('Serial Number')),
+				E('th', { 'class': 'th' }, _('Size')),
+				E('th', { 'class': 'th' }, _('Sector Size')),
+				E('th', { 'class': 'th' }, _('Partition Table')),
+				isRaid ? E('th', { 'class': 'th' }, _('Level')) : E('th', { 'class': 'th' }, _('Temp')),
+				isRaid ? E('th', { 'class': 'th' }, _('Members')) : E('th', { 'class': 'th' }, _('SATA Version')),
+				isRaid ? E('th', { 'class': 'th' }, _('Status')) : E('th', { 'class': 'th' }, _('Rotation Rate')),
+				E('th', { 'class': 'th' }, _('Status')),
+				E('th', { 'class': 'th' }, _('Health')),
 				E('th', { 'class': 'th center' }, '')
 			])
 		]);
@@ -270,7 +301,7 @@ return view.extend({
 				ev.preventDefault();
 				self.showSmartModal(devName);
 			}
-		}, diskInfo.health || _('Health') + ' / ' + _('健康'));
+		}, translateHealth(diskInfo.health));
 
 		// Eject button
 		var anyMounted = diskInfo.partitions && diskInfo.partitions.some(function(p){ return p.mount_point !== '-'; });
@@ -292,7 +323,7 @@ return view.extend({
 					window.location.href = L.url('admin/system/diskbox');
 				});
 			}
-		}, isRaid ? (_('Remove') + ' / ' + _('删除')) : (_('Eject') + ' / ' + _('弹出')));
+		}, isRaid ? _('Remove') : _('Eject'));
 
 		devTable.appendChild(E('tr', { 'class': 'tr' }, [
 			E('td', { 'class': 'td' }, E('strong', {}, diskInfo.path)),
@@ -304,7 +335,7 @@ return view.extend({
 			isRaid ? E('td', { 'class': 'td' }, diskInfo.level || '-') : E('td', { 'class': 'td' }, diskInfo.temp || '-'),
 			isRaid ? E('td', { 'class': 'td' }, diskInfo.members_str || '-') : E('td', { 'class': 'td' }, diskInfo.sata_ver || '-'),
 			isRaid ? E('td', { 'class': 'td' }, diskInfo.status || '-') : E('td', { 'class': 'td' }, diskInfo.rota_rate || '-'),
-			E('td', { 'class': 'td' }, diskInfo.status || '-'),
+			E('td', { 'class': 'td' }, translatePowerStatus(diskInfo.status)),
 			E('td', { 'class': 'td' }, healthBtn),
 			E('td', { 'class': 'td center' }, ejectBtn)
 		]));
@@ -315,28 +346,28 @@ return view.extend({
 		// Section: Partitions Info
 		if (!diskInfo.p_table || !diskInfo.p_table.includes('Raid')) {
 			var partSection = E('div', { 'class': 'cbi-section' }, [
-				E('legend', {}, _('Partitions Info') + ' / ' + _('分区信息')),
-				E('div', { 'class': 'cbi-section-descr' }, _('Default 2048 sector alignment, support +size{b,k,m,g,t} in End Sector') + ' / ' + _('默认 2048 扇区对齐，支持在【终止扇区】输入 +容量{b,k,m,g,t}'))
+				E('legend', {}, _('Partitions Info')),
+				E('div', { 'class': 'cbi-section-descr' }, _('Default 2048 sector alignment, support +size{b,k,m,g,t} in End Sector'))
 			]);
 
 			var partTable = E('table', { 'class': 'table cbi-section-table' }, [
 				E('tr', { 'class': 'tr table-titles' }, [
-					E('th', { 'class': 'th' }, _('Name') + ' / ' + _('名称')),
-					E('th', { 'class': 'th' }, _('Start Sector') + ' / ' + _('起始扇区')),
-					E('th', { 'class': 'th' }, _('End Sector') + ' / ' + _('终止扇区')),
-					E('th', { 'class': 'th' }, _('Size') + ' / ' + _('大小')),
-					E('th', { 'class': 'th' }, _('Used') + ' / ' + _('已用')),
-					E('th', { 'class': 'th' }, _('Free Space') + ' / ' + _('可用空间')),
-					E('th', { 'class': 'th' }, _('Usage') + ' / ' + _('使用率')),
-					E('th', { 'class': 'th' }, _('Mount Point') + ' / ' + _('挂载点')),
-					E('th', { 'class': 'th' }, _('File System') + ' / ' + _('文件系统')),
+					E('th', { 'class': 'th' }, _('Name')),
+					E('th', { 'class': 'th' }, _('Start Sector')),
+					E('th', { 'class': 'th' }, _('End Sector')),
+					E('th', { 'class': 'th' }, _('Size')),
+					E('th', { 'class': 'th' }, _('Used')),
+					E('th', { 'class': 'th' }, _('Free Space')),
+					E('th', { 'class': 'th' }, _('Usage')),
+					E('th', { 'class': 'th' }, _('Mount Point')),
+					E('th', { 'class': 'th' }, _('File System')),
 					E('th', { 'class': 'th center' }, '')
 				])
 			]);
 
 			var partitions = diskInfo.partitions || [];
 			partitions.forEach(function(part) {
-				var isFree = (part.number === -1);
+				var isFree = (part.number === -1 || part.fs === 'Free Space' || part.type === 'free');
 				var isMounted = (part.mount_point !== '-');
 
 				if (isFree) {
@@ -350,21 +381,21 @@ return view.extend({
 							var sSec = startIn.value;
 							var eSec = endIn.value;
 							if (!sSec || !eSec) {
-								ui.addNotification(null, E('p', {}, _('起始或终止扇区无效！')));
+								ui.addNotification(null, E('p', {}, _('Invalid Start or End sector!')));
 								return;
 							}
-							ui.showModal(_('正在创建分区'), [ E('p', { 'class': 'spinning' }, _('正在创建新分区...')) ]);
+							ui.showModal(_('Creating Partition'), [ E('p', { 'class': 'spinning' }, _('Creating new partition...')) ]);
 							callCreatePartition(devName, sSec, eSec, 'primary').then(function(res) {
 								if (res && res.code !== 0) {
-									ui.addNotification(null, E('p', {}, res.error || _('创建分区失败。')));
+									ui.addNotification(null, E('p', {}, res.error || _('Failed to create partition.')));
 								}
 								location.reload();
 							});
 						}
-					}, _('新建'));
+					}, _('New'));
 
 					partTable.appendChild(E('tr', { 'class': 'tr', 'style': 'background-color:rgba(255,255,255,0.03);' }, [
-						E('td', { 'class': 'td', 'style': 'font-style:italic; color:#888;' }, _('空闲空间')),
+						E('td', { 'class': 'td', 'style': 'font-style:italic; color:#888;' }, _('Free Space')),
 						E('td', { 'class': 'td' }, startIn),
 						E('td', { 'class': 'td' }, endIn),
 						E('td', { 'class': 'td' }, part.size_formated),
@@ -385,9 +416,9 @@ return view.extend({
 								ev.preventDefault();
 								self.showFormatModal(part.name, formatCmds, part.fs);
 							}
-						}, (part.fs === 'raw' ? _('格式化') : part.fs.toUpperCase()));
+						}, translateFs(part.fs, part.type));
 					} else {
-						formatBtn = E('span', {}, isExtended ? _('扩展分区') : part.fs);
+						formatBtn = E('span', {}, translateFs(part.fs, part.type));
 					}
 
 					var hasLogicals = partitions.some(function(p){ return p.type === 'logical'; });
@@ -398,16 +429,16 @@ return view.extend({
 						'disabled': removeDisabled,
 						'click': function(ev) {
 							ev.preventDefault();
-							if (!confirm(_('确定要删除分区 %s 吗？').format(part.name))) return;
-							ui.showModal(_('正在删除分区'), [ E('p', { 'class': 'spinning' }, _('正在删除分区...')) ]);
+							if (!confirm(_('Are you sure you want to delete partition %s?').format(part.name))) return;
+							ui.showModal(_('Deleting Partition'), [ E('p', { 'class': 'spinning' }, _('Removing partition...')) ]);
 							callRemovePartition(devName, part.number).then(function(res) {
 								if (res && res.code !== 0) {
-									ui.addNotification(null, E('p', {}, res.error || _('删除分区失败。')));
+									ui.addNotification(null, E('p', {}, res.error || _('Failed to remove partition.')));
 								}
 								location.reload();
 							});
 						}
-					}, _('删除'));
+					}, _('Delete'));
 
 					partTable.appendChild(E('tr', { 'class': 'tr' }, [
 						E('td', { 'class': 'td' }, E('strong', {}, part.name)),
@@ -433,7 +464,7 @@ return view.extend({
 			E('a', {
 				'class': 'btn cbi-button cbi-button-link',
 				'href': L.url('admin/system/diskbox')
-			}, _('返回至概览'))
+			}, _('Back to Overview'))
 		]);
 		viewRoot.appendChild(footerDiv);
 
