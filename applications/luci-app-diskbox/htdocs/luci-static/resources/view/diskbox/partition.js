@@ -1,4 +1,6 @@
 'use strict';
+// Copyright (C) 2026 permails <https://github.com/permails/luci-app-diskbox>
+// Licensed under the GNU General Public License v3.0
 'require view';
 'require rpc';
 'require ui';

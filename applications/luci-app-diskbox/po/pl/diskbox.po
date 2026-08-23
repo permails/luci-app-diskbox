@@ -1,8 +1,8 @@
-msgid ""
+﻿msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "PO-Revision-Date: 2023-04-21 02:03+0000\n"
-"Last-Translator: lisaac <lisaac.cn@gmail.com>\n"
+"Last-Translator: permails <permails@github.com>\n"
 "Language-Team: Polski (Polish) <https://hosted.weblate.org/projects/"
 "openwrt/luciapplicationsdiskbox/pl/>\n"
 "Language: pl\n"
@@ -48,7 +48,7 @@ msgstr "Etykieta Btrfs"
 
 #: applications/luci-app-diskbox/luasrc/model/cbi/diskbox/disks.lua:327
 msgid "Btrfs Member"
-msgstr "Członek Btrfs"
+msgstr "Cz艂onek Btrfs"
 
 #: applications/luci-app-diskbox/luasrc/model/cbi/diskbox/disks.lua:318
 msgid "Btrfs Raid Level"
@@ -66,15 +66,15 @@ msgstr ""
 #: applications/luci-app-diskbox/luasrc/model/cbi/diskbox/btrfs.lua:110
 #: applications/luci-app-diskbox/luasrc/model/cbi/diskbox/btrfs.lua:129
 msgid "Create"
-msgstr "Utwórz"
+msgstr "Utw贸rz"
 
 #: applications/luci-app-diskbox/luasrc/model/cbi/diskbox/disks.lua:344
 msgid "Create Btrfs"
-msgstr "Utwórz Btrfs"
+msgstr "Utw贸rz Btrfs"
 
 #: applications/luci-app-diskbox/luasrc/model/cbi/diskbox/disks.lua:295
 msgid "Create Raid"
-msgstr "Utwórz RAID"
+msgstr "Utw贸rz RAID"
 
 #: applications/luci-app-diskbox/luasrc/model/cbi/diskbox/disks.lua:241
 msgid "Creation"
@@ -87,18 +87,18 @@ msgstr "Data"
 #: applications/luci-app-diskbox/luasrc/model/cbi/diskbox/partition.lua:121
 msgid "Default 2048 sector alignment, support +size{b,k,m,g,t} in End Sector"
 msgstr ""
-"Sektory wyrównywane są do wielokrotności 2048, sektor końcowy można podać "
+"Sektory wyr贸wnywane s膮 do wielokrotno艣ci 2048, sektor ko艅cowy mo偶na poda膰 "
 "jako rozmiar w postaci +size{b,k,m,g,t}"
 
 #: applications/luci-app-diskbox/luasrc/model/cbi/diskbox/btrfs.lua:114
 #: applications/luci-app-diskbox/luasrc/model/cbi/diskbox/btrfs.lua:118
 #: applications/luci-app-diskbox/luasrc/model/cbi/diskbox/btrfs.lua:127
 msgid "Delete"
-msgstr "Usuń"
+msgstr "Usu艅"
 
 #: applications/luci-app-diskbox/luasrc/model/cbi/diskbox/btrfs.lua:184
 msgid "Destination Path (optional)"
-msgstr "Ścieżka docelowa (opcjonalnie)"
+msgstr "艢cie偶ka docelowa (opcjonalnie)"
 
 #: applications/luci-app-diskbox/luasrc/model/cbi/diskbox/disks.lua:120
 msgid "Device"
@@ -106,15 +106,15 @@ msgstr ""
 
 #: applications/luci-app-diskbox/luasrc/model/cbi/diskbox/partition.lua:28
 msgid "Device Info"
-msgstr "Informacja o urządzeniu"
+msgstr "Informacja o urz膮dzeniu"
 
 #: applications/luci-app-diskbox/luasrc/controller/diskbox.lua:24
 msgid "Disk Man"
-msgstr "Menadżer dysków"
+msgstr "Menad偶er dysk贸w"
 
 #: applications/luci-app-diskbox/luasrc/model/cbi/diskbox/disks.lua:11
 msgid "diskbox"
-msgstr "Menadżer dysków"
+msgstr "Menad偶er dysk贸w"
 
 #: applications/luci-app-diskbox/luasrc/model/cbi/diskbox/disks.lua:34
 msgid "Disks"
@@ -123,16 +123,16 @@ msgstr "Dyski"
 #: applications/luci-app-diskbox/luasrc/model/cbi/diskbox/disks.lua:52
 #: applications/luci-app-diskbox/luasrc/model/cbi/diskbox/partition.lua:91
 msgid "Eject"
-msgstr "Wysuń"
+msgstr "Wysu艅"
 
 #: applications/luci-app-diskbox/luasrc/model/cbi/diskbox/partition.lua:136
 msgid "End Sector"
-msgstr "Sektor końcowy"
+msgstr "Sektor ko艅cowy"
 
 #: applications/luci-app-diskbox/luasrc/model/cbi/diskbox/disks.lua:139
 #: applications/luci-app-diskbox/luasrc/model/cbi/diskbox/partition.lua:184
 msgid "File System"
-msgstr "System plików"
+msgstr "System plik贸w"
 
 #: applications/luci-app-diskbox/luasrc/view/diskbox/smart_detail.htm:62
 msgid "Flag"
@@ -154,7 +154,7 @@ msgstr ""
 #: applications/luci-app-diskbox/luasrc/model/cbi/diskbox/btrfs.lua:34
 #: applications/luci-app-diskbox/luasrc/model/cbi/diskbox/partition.lua:160
 msgid "Free Space"
-msgstr "Wolna przestrzeń"
+msgstr "Wolna przestrze艅"
 
 #: applications/luci-app-diskbox/luasrc/model/cbi/diskbox/disks.lua:46
 #: applications/luci-app-diskbox/luasrc/model/cbi/diskbox/partition.lua:59
@@ -168,11 +168,11 @@ msgstr ""
 
 #: applications/luci-app-diskbox/luasrc/model/cbi/diskbox/partition.lua:320
 msgid "Invalid End Sector!"
-msgstr "Nieprawidłowy sektor końcowy�?
+msgstr "Nieprawid艂owy sektor ko艅cowy锛?
 
 #: applications/luci-app-diskbox/luasrc/model/cbi/diskbox/partition.lua:301
 msgid "Invalid Start Sector!"
-msgstr "Nieprawidłowy sektor początkowy�?
+msgstr "Nieprawid艂owy sektor pocz膮tkowy锛?
 
 #: applications/luci-app-diskbox/luasrc/view/diskbox/smart_detail.htm:57
 msgid "KEY"
@@ -189,18 +189,18 @@ msgstr ""
 
 #: applications/luci-app-diskbox/luasrc/model/cbi/diskbox/btrfs.lua:19
 msgid "Manage Btrfs"
-msgstr "Zarządzaj Btrfs"
+msgstr "Zarz膮dzaj Btrfs"
 
 #: applications/luci-app-diskbox/luasrc/model/cbi/diskbox/disks.lua:11
 msgid "Manage Disks over LuCI."
-msgstr "Zarządzaj dyskami przez LuCI."
+msgstr "Zarz膮dzaj dyskami przez LuCI."
 
 #: applications/luci-app-diskbox/luasrc/model/cbi/diskbox/btrfs.lua:29
 #: applications/luci-app-diskbox/luasrc/model/cbi/diskbox/disks.lua:94
 #: applications/luci-app-diskbox/luasrc/model/cbi/diskbox/disks.lua:107
 #: applications/luci-app-diskbox/luasrc/model/cbi/diskbox/partition.lua:52
 msgid "Members"
-msgstr "Członkowie"
+msgstr "Cz艂onkowie"
 
 #: applications/luci-app-diskbox/luasrc/model/cbi/diskbox/btrfs.lua:31
 msgid "Metadata"
@@ -209,7 +209,7 @@ msgstr "Metadata"
 #: applications/luci-app-diskbox/luasrc/model/cbi/diskbox/disks.lua:38
 #: applications/luci-app-diskbox/luasrc/model/cbi/diskbox/partition.lua:32
 msgid "Model"
-msgstr "Model urządzenia"
+msgstr "Model urz膮dzenia"
 
 #: applications/luci-app-diskbox/luasrc/model/cbi/diskbox/disks.lua:210
 #: applications/luci-app-diskbox/luasrc/model/cbi/diskbox/disks.lua:214
@@ -229,7 +229,7 @@ msgstr "Punkt montowania"
 
 #: applications/luci-app-diskbox/luasrc/model/cbi/diskbox/disks.lua:244
 msgid "Multiple Devices Btrfs Creation"
-msgstr "Kreator urządzeń Btrfs"
+msgstr "Kreator urz膮dze艅 Btrfs"
 
 #: applications/luci-app-diskbox/luasrc/model/cbi/diskbox/partition.lua:124
 msgid "Name"
@@ -263,11 +263,11 @@ msgstr "Otime"
 
 #: applications/luci-app-diskbox/luasrc/model/cbi/diskbox/partition.lua:17
 msgid "Partition Disk over LuCI."
-msgstr "Zarządzaj partycjami przez LuCI."
+msgstr "Zarz膮dzaj partycjami przez LuCI."
 
 #: applications/luci-app-diskbox/luasrc/model/cbi/diskbox/partition.lua:17
 msgid "Partition Management"
-msgstr "Menadżer partycji"
+msgstr "Menad偶er partycji"
 
 #: applications/luci-app-diskbox/luasrc/model/cbi/diskbox/disks.lua:43
 #: applications/luci-app-diskbox/luasrc/model/cbi/diskbox/disks.lua:92
@@ -288,21 +288,21 @@ msgstr "Informacja o partycjach"
 #: applications/luci-app-diskbox/luasrc/model/cbi/diskbox/disks.lua:89
 #: applications/luci-app-diskbox/luasrc/model/cbi/diskbox/partition.lua:31
 msgid "Path"
-msgstr "Ścieżka"
+msgstr "艢cie偶ka"
 
 #: applications/luci-app-diskbox/luasrc/model/cbi/diskbox/btrfs.lua:206
 msgid "Please input Source Path of snapshot, Source Path must start with '/'"
 msgstr ""
-"Proszę podać ścieżkę źródłową dla obrazu, ścieżka musi zaczynać się od '/'"
+"Prosz臋 poda膰 艣cie偶k臋 藕r贸d艂ow膮 dla obrazu, 艣cie偶ka musi zaczyna膰 si臋 od '/'"
 
 #: applications/luci-app-diskbox/luasrc/model/cbi/diskbox/btrfs.lua:133
 msgid "Please input Subvolume Path, Subvolume must start with '/'"
 msgstr ""
-"Proszę podać ścieżkę dla sub-wolumenu, sub-wolumen musi zaczynać się od '/'"
+"Prosz臋 poda膰 艣cie偶k臋 dla sub-wolumenu, sub-wolumen musi zaczyna膰 si臋 od '/'"
 
 #: applications/luci-app-diskbox/luasrc/view/diskbox/partition_info.htm:103
 msgid "Please select file system!"
-msgstr "Proszę wybrać system plików!"
+msgstr "Prosz臋 wybra膰 system plik贸w!"
 
 #: applications/luci-app-diskbox/luasrc/model/cbi/diskbox/disks.lua:243
 msgid "RAID"
@@ -314,7 +314,7 @@ msgstr "Kreator RAID"
 
 #: applications/luci-app-diskbox/luasrc/model/cbi/diskbox/disks.lua:87
 msgid "RAID Devices"
-msgstr "Urządzenia RAID"
+msgstr "Urz膮dzenia RAID"
 
 #: applications/luci-app-diskbox/luasrc/model/cbi/diskbox/disks.lua:90
 msgid "RAID mode"
@@ -326,7 +326,7 @@ msgstr "Poziom RAID"
 
 #: applications/luci-app-diskbox/luasrc/model/cbi/diskbox/disks.lua:278
 msgid "Raid Member"
-msgstr "Członek RAID"
+msgstr "Cz艂onek RAID"
 
 #: applications/luci-app-diskbox/luasrc/model/cbi/diskbox/disks.lua:250
 msgid "Raid Name"
@@ -344,7 +344,7 @@ msgstr "Tylko do odczytu"
 #: applications/luci-app-diskbox/luasrc/model/cbi/diskbox/partition.lua:276
 #: applications/luci-app-diskbox/luasrc/model/cbi/diskbox/partition.lua:348
 msgid "Remove"
-msgstr "Wysuń"
+msgstr "Wysu艅"
 
 #: applications/luci-app-diskbox/luasrc/model/cbi/diskbox/disks.lua:20
 msgid "Rescan Disks"
@@ -381,7 +381,7 @@ msgstr "Numer seryjny"
 #: applications/luci-app-diskbox/luasrc/model/cbi/diskbox/btrfs.lua:86
 #: applications/luci-app-diskbox/luasrc/model/cbi/diskbox/btrfs.lua:93
 msgid "Set Default"
-msgstr "Ustaw domyślnie"
+msgstr "Ustaw domy艣lnie"
 
 #: applications/luci-app-diskbox/luasrc/model/cbi/diskbox/btrfs.lua:32
 #: applications/luci-app-diskbox/luasrc/model/cbi/diskbox/disks.lua:40
@@ -401,11 +401,11 @@ msgstr "Obrazy"
 
 #: applications/luci-app-diskbox/luasrc/model/cbi/diskbox/btrfs.lua:168
 msgid "Source Path"
-msgstr "Ścieżka źródłowa"
+msgstr "艢cie偶ka 藕r贸d艂owa"
 
 #: applications/luci-app-diskbox/luasrc/model/cbi/diskbox/partition.lua:125
 msgid "Start Sector"
-msgstr "Sektor początkowy"
+msgstr "Sektor pocz膮tkowy"
 
 #: applications/luci-app-diskbox/luasrc/model/cbi/diskbox/disks.lua:46
 #: applications/luci-app-diskbox/luasrc/model/cbi/diskbox/disks.lua:93
@@ -428,11 +428,11 @@ msgstr "Temperatura"
 
 #: applications/luci-app-diskbox/luasrc/model/cbi/diskbox/btrfs.lua:175
 msgid "The path where you want to store the snapshot"
-msgstr "Ścieżka w której chcesz przechowywać obraz"
+msgstr "艢cie偶ka w kt贸rej chcesz przechowywa膰 obraz"
 
 #: applications/luci-app-diskbox/luasrc/model/cbi/diskbox/btrfs.lua:168
 msgid "The source path for create the snapshot"
-msgstr "Ścieżka źródłowa do utworzenia obrazu"
+msgstr "艢cie偶ka 藕r贸d艂owa do utworzenia obrazu"
 
 #: applications/luci-app-diskbox/luasrc/view/diskbox/smart_detail.htm:65
 msgid "Thresh"
@@ -479,7 +479,7 @@ msgstr "Wykorzystane"
 #: applications/luci-app-diskbox/luasrc/model/cbi/diskbox/btrfs.lua:33
 #: applications/luci-app-diskbox/luasrc/model/cbi/diskbox/partition.lua:159
 msgid "Used"
-msgstr "Zajęte"
+msgstr "Zaj臋te"
 
 #: applications/luci-app-diskbox/luasrc/view/diskbox/smart_detail.htm:58
 msgid "VALUE"
@@ -494,9 +494,9 @@ msgid ""
 "Warnning !! \\nTHIS WILL OVERWRITE EXISTING PARTITIONS!! \\nModify the "
 "partition table?"
 msgstr ""
-"Ostrzeżenie !! \n"
-"ISTNIEJĄCE PARTYCJE ZOSTANĄ NADPISANE!! \n"
-"Zmodyfikować tablicę partycji?"
+"Ostrze偶enie !! \n"
+"ISTNIEJ膭CE PARTYCJE ZOSTAN膭 NADPISANE!! \n"
+"Zmodyfikowa膰 tablic臋 partycji?"
 
 #: applications/luci-app-diskbox/luasrc/view/diskbox/smart_detail.htm:64
 msgid "Worst"
@@ -505,11 +505,11 @@ msgstr ""
 #: applications/luci-app-diskbox/luasrc/model/cbi/diskbox/disks.lua:63
 #: applications/luci-app-diskbox/luasrc/model/cbi/diskbox/partition.lua:99
 msgid "is in use! please unmount it first!"
-msgstr "aktualnie jest w użyciu, proszę najpierw odmontować�?
+msgstr "aktualnie jest w u偶yciu, prosz臋 najpierw odmontowa膰锛?
 
 #~ msgid "Partition NOT found!"
-#~ msgstr "Nie znaleziono partycji�?
+#~ msgstr "Nie znaleziono partycji锛?
 
 #~ msgid "Filesystem NOT support!"
-#~ msgstr "System plików nie jest obsługiwany�?
+#~ msgstr "System plik贸w nie jest obs艂ugiwany锛?
 
