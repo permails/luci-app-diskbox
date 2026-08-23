@@ -834,7 +834,7 @@ return view.extend({
 
 		// Page Header
 		var headerDiv = E('div', { 'style': 'margin-bottom:1rem;' }, [
-			E('h2', { 'style': 'margin-bottom:0.25rem;' }, _('DiskMan 磁盘管理')),
+			E('h2', { 'style': 'margin-bottom:0.25rem;' }, _('DiskBox 磁盘管理')),
 			E('div', { 'class': 'cbi-map-descr', 'style': 'margin-bottom:0.75rem;' }, _('通过 LuCI 管理磁盘')),
 			E('div', { 'style': 'margin-bottom:1.5rem;' }, [
 				E('button', {
