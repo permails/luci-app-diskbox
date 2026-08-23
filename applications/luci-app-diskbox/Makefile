@@ -4,7 +4,7 @@ PKG_NAME:=luci-app-diskbox
 LUCI_NAME:=luci-app-diskbox
 PKG_VERSION:=1.0.0
 PKG_RELEASE:=1
-PKG_MAINTAINER:=OpenWrt Community
+PKG_MAINTAINER:=permails <https://github.com/permails/luci-app-diskbox>
 PKG_LICENSE:=AGPL-3.0
 
 LUCI_TITLE:=DiskBox - Modern Disk Manager interface for LuCI

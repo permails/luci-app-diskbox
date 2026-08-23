@@ -51,3 +51,10 @@ applications/luci-app-diskbox/
 │       └── rpcd/acl.d/luci-app-diskbox.json
 └── po/
 ```
+
+## 作者 / Author
+- **permails** (<https://github.com/permails/luci-app-diskbox>)
+
+## 许可证 / License
+- AGPL-3.0 License
+
