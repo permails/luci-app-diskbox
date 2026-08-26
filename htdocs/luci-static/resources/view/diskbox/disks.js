@@ -1104,22 +1104,23 @@ return view.extend({
 		var mountSection = E('div', { 'class': 'cbi-section' }, [
 			E('legend', {}, _('Mount Points'))
 		]);
-		var mountTable = E('table', { 'class': 'table cbi-section-table' }, [
+		var mountCellStyle = 'white-space:normal; overflow-wrap:anywhere; word-break:break-word;';
+		var mountTable = E('table', { 'class': 'table cbi-section-table', 'style': 'width:100%; table-layout:fixed;' }, [
 			E('tr', { 'class': 'tr table-titles' }, [
-				E('th', { 'class': 'th' }, _('Device')),
-				E('th', { 'class': 'th' }, _('File System')),
-				E('th', { 'class': 'th' }, _('Mount Options')),
-				E('th', { 'class': 'th' }, _('Mount Point')),
-				E('th', { 'class': 'th center' }, _('Mount'))
+				E('th', { 'class': 'th', 'style': 'width:16%;' }, _('Device')),
+				E('th', { 'class': 'th', 'style': 'width:12%;' }, _('File System')),
+				E('th', { 'class': 'th', 'style': 'width:42%;' }, _('Mount Options')),
+				E('th', { 'class': 'th', 'style': 'width:20%;' }, _('Mount Point')),
+				E('th', { 'class': 'th center', 'style': 'width:10%;' }, _('Mount'))
 			])
 		]);
 
 		mountPoints.forEach(function(mp) {
 			mountTable.appendChild(E('tr', { 'class': 'tr' }, [
-				E('td', { 'class': 'td' }, mp.device),
-				E('td', { 'class': 'td' }, mp.fs),
-				E('td', { 'class': 'td', 'style': 'word-break:break-all; max-width:300px;' }, mp.mount_options),
-				E('td', { 'class': 'td' }, E('code', {}, mp.mount_point)),
+				E('td', { 'class': 'td', 'style': mountCellStyle }, mp.device),
+				E('td', { 'class': 'td', 'style': mountCellStyle }, mp.fs),
+				E('td', { 'class': 'td', 'style': mountCellStyle }, mp.mount_options),
+				E('td', { 'class': 'td', 'style': mountCellStyle }, E('code', { 'style': mountCellStyle }, mp.mount_point)),
 				E('td', { 'class': 'td center' }, [
 					E('button', {
 						'class': 'btn cbi-button cbi-button-remove',
